@@ -1,21 +1,54 @@
-# 📊 Analytics Dashboard
+# 📊 Design Your Own Analytics Dashboard
 
-A modern, customizable analytics dashboard built with React, featuring drag-and-drop widgets, real-time data visualization, and a beautiful UI.
+🧠 A customizable, interactive analytics platform built with React, where users can design, configure, and manage their own dashboards — featuring real-time data visualization, drag-and-drop widgets, and persistent layouts.
 
-![Dashboard Demo](https://via.placeholder.com/800x400?text=Dashboard+Screenshot)
+🔗 Live Demo: https://your-own-analytics-dashboard.netlify.app/
+
+💻 GitHub: https://github.com/jasminekeshari/analytics-dashboard
+
+<img width="1366" height="768" alt="Screenshot (134)" src="https://github.com/user-attachments/assets/68ffc7bc-bfd0-452f-b4db-d12d5800e717" />
+
+dashboard
+
+# 🚀 Overview
+
+Analytics Dashboard is a fully dynamic and customizable web application designed for data-driven professionals who want to visualize and interact with their analytics in their own way.
+
+# Users can:
+
+-**Build dashboards using drag-and-drop widgets**
+-**Configure each widget (data source, title, visualization type, etc.)**
+-**Resize, duplicate, or remove widgets freely**
+-**Persist layouts between sessions**
+-**Simulate real-world data APIs and error handling**
+-**Switch between Editor (can modify) and Viewer (read-only) roles**
+-This project demonstrates strong front-end architecture, state management, and data visualization skills with clean code, TypeScript safety, and modern UI principles.
 
 ## ✨ Features
 
-- 🎨 **Beautiful UI** - Modern design with Tailwind CSS
-- 🖱️ **Drag & Drop** - Rearrange widgets freely
-- 📐 **Resizable Widgets** - Customize widget sizes
-- 📊 **8 Widget Types** - Charts, tables, KPIs, and notes
-- ⚙️ **Configurable** - Edit widget settings on the fly
-- ↩️ **Undo/Redo** - Track up to 10 layout changes
-- 🔐 **Mock Authentication** - Editor and Viewer roles
-- 📱 **Responsive** - Works on all screen sizes
-- ⚡ **Fast Performance** - Code splitting and lazy loading
-- 🛡️ **Error Boundaries** - One broken widget won't crash the dashboard
+| Category              | Feature                     | Description                                    |
+| --------------------- | --------------------------- | ---------------------------------------------- |
+| 🎨 **UI**             | **Modern Design**           | Beautiful, minimal UI built with Tailwind CSS  |
+| 🧩 **Widgets**        | **8 Types Available**       | Charts, tables, KPIs, and markdown notes       |
+| 🖱️ **Interactions**  | **Drag, Resize, Reorder**   | Intuitive grid-based widget manipulation       |
+| ⚙️ **Customization**  | **Configurable Widgets**    | Edit titles, data sources, and appearance live |
+| 💾 **Persistence**    | **Local Storage Save**      | Dashboards are saved and loaded automatically  |
+| 🔁 **Undo/Redo**      | **Mini History (10 steps)** | Reverse accidental layout changes              |
+| 🔐 **Auth System**    | **Mock Login with Roles**   | Viewer (read-only) and Editor (full access)    |
+| 🧱 **Error Handling** | **Widget Error Boundaries** | One broken widget won’t crash the whole app    |
+| 📱 **Responsive**     | **Mobile-Friendly**         | Adaptive design for all screen sizes           |
+| ⚡ **Performance**     | **Code Splitting**          | Lazy-loaded widgets improve load speed         |
+
+
+## 🧭 Use Case
+
+-This app can serve as a template or starter project for:
+-Product Analytics Dashboards
+-Admin Panels / BI Tools
+-Team Performance Tracking
+-KPI Reporting Interfaces
+-Client-Facing Insights Portals
+-It helps organizations or individuals visualize performance metrics, track progress, and make data-informed decisions in a customizable and interactive way.
 
 ## 🚀 Quick Start
 
@@ -197,8 +230,8 @@ MIT License - feel free to use this project for learning or commercial purposes.
 ## 👤 Author
 
 **Your Name**
-- GitHub: [@yourusername](https://github.com/yourusername)
-- LinkedIn: [Your Name](https://linkedin.com/in/yourname)
+- GitHub:https://github.com/jasminekeshari
+- LinkedIn: 
 
 ## 🙏 Acknowledgments
 
