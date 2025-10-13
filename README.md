@@ -2,7 +2,8 @@
 
 A modern, customizable analytics dashboard built with React, featuring drag-and-drop widgets, real-time data visualization, and a beautiful UI.
 
-![Dashboard Demo](https://via.placeholder.com/800x400?text=Dashboard+Screenshot)
+<img width="1366" height="768" alt="Screenshot (133)" src="https://github.com/user-attachments/assets/4b975455-0b0f-4bef-a282-92a186214cb6" />
+
 
 ## ✨ Features
 
@@ -28,7 +29,7 @@ A modern, customizable analytics dashboard built with React, featuring drag-and-
 
 1. **Clone the repository**
 ```bash
-git clone https://github.com/yourusername/analytics-dashboard.git
+git clone https://github.com/jasminekeshari/analytics-dashboard
 cd analytics-dashboard
 ```
 
@@ -197,8 +198,8 @@ MIT License - feel free to use this project for learning or commercial purposes.
 ## 👤 Author
 
 **Your Name**
-- GitHub: [@yourusername](https://github.com/yourusername)
-- LinkedIn: [Your Name](https://linkedin.com/in/yourname)
+- GitHub: https://github.com/jasminekeshari
+- LinkedIn:
 
 ## 🙏 Acknowledgments
 
