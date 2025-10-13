@@ -1,4 +1,5 @@
 📊 Design Your Own Analytics Dashboard
+
 🧠 A customizable, interactive analytics platform built with React, where users can design, configure, and manage their own dashboards — featuring real-time data visualization, drag-and-drop widgets, and persistent layouts.
 
 🔗 Live Demo: https://your-own-analytics-dashboard.netlify.app/
