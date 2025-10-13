@@ -1,276 +1,183 @@
-📊 Design Your Own Analytics Dashboard
+# 🧮 Analytics Dashboard
 
-🧠 A customizable, interactive analytics platform built with React, where users can design, configure, and manage their own dashboards — featuring real-time data visualization, drag-and-drop widgets, and persistent layouts.
+A modern **React + Tailwind CSS** web application for visualizing analytics data in an intuitive, clean, and interactive interface.  
+This project is built with performance, scalability, and maintainability in mind — following best practices for modern frontend development.
 
-🔗 Live Demo: https://your-own-analytics-dashboard.netlify.app/
+## 🌟 Features
 
-💻 GitHub: https://github.com/jasminekeshari/analytics-dashboard
+✅ **Responsive UI** — Built with Tailwind CSS for fast, adaptive layouts.  
+✅ **Reusable Components** — Modular design for scalability.  
+✅ **Interactive Charts** — Integrates with Chart.js/Recharts for data visualization.  
+✅ **Dark Mode Ready** — Tailwind dark theme configuration.  
+✅ **Optimized Performance** — Code-splitting and lazy loading enabled.  
+✅ **Clean Folder Structure** — Organized and developer-friendly architecture.
 
-🚀 Overview
+## 🧩 Folder Structure
 
-Analytics Dashboard is a fully dynamic and customizable web application designed for data-driven professionals who want to visualize and interact with their analytics in their own way.
-
-Users can:
-
-Build dashboards using drag-and-drop widgets
-
-Configure each widget (data source, title, visualization type, etc.)
-
-Resize, duplicate, or remove widgets freely
-
-Persist layouts between sessions
-
-Simulate real-world data APIs and error handling
-
-Switch between Editor (can modify) and Viewer (read-only) roles
-
-This project demonstrates strong front-end architecture, state management, and data visualization skills with clean code, TypeScript safety, and modern UI principles.
-
-✨ Key Features
-Category	Feature	Description
-🎨 UI	Modern Design	Beautiful, minimal UI built with Tailwind CSS
-🧩 Widgets	8 Types Available	Charts, tables, KPIs, and markdown notes
-🖱️ Interactions	Drag, Resize, Reorder	Intuitive grid-based widget manipulation
-⚙️ Customization	Configurable Widgets	Edit titles, data sources, and appearance live
-💾 Persistence	Local Storage Save	Dashboards are saved and loaded automatically
-🔁 Undo/Redo	Mini History (10 steps)	Reverse accidental layout changes
-🔐 Auth System	Mock Login with Roles	Viewer (read-only) and Editor (full access)
-🧱 Error Handling	Widget Error Boundaries	One broken widget won’t crash the whole app
-📱 Responsive	Mobile-Friendly	Adaptive design for all screen sizes
-⚡ Performance	Code Splitting	Lazy-loaded widgets improve load speed
-🧭 Use Case
-
-This app can serve as a template or starter project for:
-
-Product Analytics Dashboards
-
-Admin Panels / BI Tools
-
-Team Performance Tracking
-
-KPI Reporting Interfaces
-
-Client-Facing Insights Portals
-
-It helps organizations or individuals visualize performance metrics, track progress, and make data-informed decisions in a customizable and interactive way.
-
-🛠️ Tech Stack
-Frontend
-
-⚛️ React 18
-
-⚡ Vite
-
-🎨 Tailwind CSS
-
-🧠 Zustand (state management)
-
-🔄 TanStack React Query (data fetching)
-
-📈 Recharts (charts)
-
-🧾 react-hook-form + Zod (form & validation)
-
-📐 react-grid-layout (drag & resize system)
-
-🧩 Lucide React (icons)
-
-Backend (Mock API)
-
-🟢 Node.js + Express
-
-🧰 json-server (mock endpoints)
-
-🔁 Simulated latency + random errors for realism
-
-🌐 CORS enabled
-
-📁 Project Structure
-analytics-dashboard/
-├── backend/              
-│   ├── server.js        # Express + json-server mock API
-│   └── seed.json        # Mock data sources
+```
+frontend/
 │
-├── frontend/            
-│   ├── src/
-│   │   ├── components/
-│   │   │   ├── auth/          # Login & role management
-│   │   │   ├── dashboard/     # Canvas, Gallery, Config Panel
-│   │   │   ├── widgets/       # All widget types (charts, tables, etc.)
-│   │   │   └── common/        # Shared UI elements
-│   │   ├── store/             # Zustand stores (auth, dashboard)
-│   │   ├── lib/               # API clients, hooks
-│   │   ├── utils/             # Helper functions
-│   │   └── App.jsx            # Root component
-│   └── package.json
+├── public/                # Static assets (favicon, images, etc.)
+├── src/
+│   ├── assets/            # Icons, images, etc.
+│   ├── components/        # Reusable UI components
+│   ├── hooks/             # Custom React hooks
+│   ├── pages/             # Page-level components (Dashboard, Login, etc.)
+│   ├── store/             # State management (Zustand/Redux)
+│   ├── utils/             # Helper functions
+│   ├── App.jsx            # Root component
+│   ├── main.jsx           # Entry point
+│   └── index.css          # Tailwind base styles
 │
+├── package.json
+├── tailwind.config.js
+├── postcss.config.js
 └── README.md
+```
 
-🎯 Available Widgets
-Charts
+## ⚙️ Installation
 
-📈 Time Series Chart — Line chart showing trends over time
+### 1️⃣ Clone the repository
+```bash
+git clone https://github.com/your-username/analytics-dashboard.git
+cd analytics-dashboard/frontend
+```
 
-📊 Bar Chart — Compare category-wise values
-
-🍩 Pie Chart — Display proportional data
-
-Tables
-
-📋 Orders Table — Paginated table with sorting/filtering
-
-👥 Users Table — Filter users by role or status
-
-KPIs
-
-💰 Single KPI — Shows one key metric with delta change
-
-📊 Multi KPI — Displays 2–3 metrics in a single card
-
-Other
-
-📝 Markdown Notes — Add formatted documentation or notes
-
-⚡ Quick Start Guide
-Prerequisites
-
-Node.js v18+
-
-npm or yarn
-
-Installation
-# Clone the repository
-git clone https://github.com/jasminekeshari/analytics-dashboard
-cd analytics-dashboard
-
-Backend Setup
-cd backend
+### 2️⃣ Install dependencies
+```bash
 npm install
-node server.js
+```
+
+### 3️⃣ Start the development server
+```bash
+npm run dev
+```
+
+### 4️⃣ Build for production
+```bash
+npm run build
+```
+
+## 🧰 Tech Stack
+
+| Category | Technology |
+|-----------|-------------|
+| Framework | React (Vite) |
+| Styling | Tailwind CSS |
+| State Management | Zustand / Redux Toolkit |
+| Charts | Recharts / Chart.js |
+| Icons | Lucide React |
+| Animations | Framer Motion |
+| Deployment | Netlify / Vercel |
 
 
-Mock API runs at 👉 http://localhost:4000
+## 📂 Folder Structure
 
-Frontend Setup
-cd ../frontend
+frontend/
+├── public/ # Static assets
+├── src/
+│ ├── assets/ # Images & icons
+│ ├── components/ # Reusable UI components
+│ ├── hooks/ # Custom React hooks
+│ ├── store/ # Global state management
+│ ├── pages/ # Page components (Dashboard, Reports, etc.)
+│ ├── App.jsx # Root component
+│ ├── main.jsx # Entry point
+│ └── index.css # Tailwind base styles
+├── package.json
+└── tailwind.config.js
+
+## ⚙️ Installation
+
+Follow these steps to set up and run the project locally:
+
+```bash
+# 1️⃣ Clone the repository
+git clone https://github.com/yourusername/analytics-dashboard.git
+
+# 2️⃣ Navigate to the project directory
+cd analytics-dashboard/frontend
+
+# 3️⃣ Install dependencies
 npm install
+
+# 4️⃣ Start the development server
 npm run dev
 
 
-App runs at 👉 http://localhost:5173
+---
 
-Login
+### 🧩 **Block 7 — Tailwind Setup**
+```markdown
+## 🎨 Tailwind Setup (if not already configured)
 
-Use any email/password to log in.
-Choose:
+If Tailwind is not set up, run:
+```bash
+npx tailwindcss init -p
+content: [
+  "./index.html",
+  "./src/**/*.{js,ts,jsx,tsx}",
+],
+theme: {
+  extend: {},
+},
+plugins: [],
 
-Editor → Full access (edit dashboard)
+And in index.css, add:
 
-Viewer → Read-only view
-
-⚙️ Environment Variables
-
-Create .env in the frontend folder:
-
-VITE_API_BASE_URL=http://localhost:4000
-
-
-For production, update this to your deployed backend URL.
-
-🧠 Core Concepts Explained
-🧩 Drag & Drop
-
-Powered by react-grid-layout, enabling smooth drag, resize, and reorder interactions on a responsive 12-column grid.
-
-🔁 Undo/Redo
-
-Implemented via a history stack storing the last 10 layout operations. Supports deep cloning for accurate state recovery.
-
-🧱 Error Boundaries
-
-Each widget is wrapped in its own boundary. If one fails, the rest remain functional — ensuring robust UI resilience.
-
-⚡ Code Splitting
-
-Widgets are lazy-loaded with React.lazy() and Suspense, reducing bundle size and improving startup performance.
-
-🌍 Mock API Resilience
-
-The mock backend:
-
-Adds 200–600ms latency
-
-Triggers 10% random errors
-
-Returns empty datasets occasionally
-This ensures widgets handle loading, empty, and error states gracefully.
-
-🧪 Testing
-cd frontend
-npm test
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 
-Includes Tests For:
+---
 
-History reducer (undo/redo)
+### 🧩 **Block 8 — Running the Project**
+```markdown
+## 🧩 Running the Project
 
-Config validators (Zod)
+After installation, start the development server:
+```bash
+npm run dev
 
-API error mapper
+Then open your browser at:
 
-Widget rendering (loading → success → error)
-
-📦 Build for Production
-cd frontend
-npm run build
+http://localhost:5173
 
 
-Build output:
-frontend/dist/
+---
 
-☁️ Deployment
-Deploy to Netlify or Vercel
+### 🧩 **Block 9 — Deployment**
+```markdown
+## 🌍 Deployment
 
-Push your code to GitHub
+You can deploy this project easily on **Netlify**, **Vercel**, or **GitHub Pages**.
 
-Go to vercel.com
- or netlify.com
+For Netlify:
+1. Push your project to GitHub.
+2. Go to [https://app.netlify.com](https://app.netlify.com)
+3. Click **New Site from Git**, connect your repository.
+4. Set build command: `npm run build`
+5. Set publish directory: `dist`
 
-Import your repository
+## 🖼️ Example Screenshot
 
-Vercel/Netlify auto-detects Vite & deploys automatically
+<img width="1366" height="768" alt="Screenshot (134)" src="https://github.com/user-attachments/assets/e3169ac2-8894-4d34-9b10-6a865252372c" />
 
-🤝 Contributing
+## 🤝 Contributing
 
-Contributions are welcome!
-If you’d like to improve features or fix bugs, feel free to open a Pull Request or create an issue.
+Contributions, issues, and feature requests are welcome!
 
-📝 License
+Feel free to check the [issues page]( to get started https://github.com/jasminekeshari/analytics-dashboard)
 
-MIT License — Free for personal or commercial use.
-Use this project as a learning resource or boilerplate for your own analytics dashboard projects.
+## 🧾 License
 
-👤 Author
+This project is licensed under the **MIT License** — see the [LICENSE](LICENSE) file for details.
+## 👩‍💻 Author
 
-Jasmine Keshari
-🌐 GitHub: github.com/jasminekeshari
+**Jasmine Keshari**  
+💼 [GitHub]
+🌐 [Portfolio]
 
-💼 LinkedIn: (add your LinkedIn link)
 
-🙏 Acknowledgments
 
-🧱 React Grid Layout — for the drag & drop grid system
-
-📊 Recharts — for beautiful charts and graphs
-
-🎨 Tailwind CSS — for rapid, modern UI styling
-
-🧠 React Query — for smooth async data management
-
-❤️ React Community — for documentation and libraries
-
-💡 Final Note
-
-This project showcases modern React architecture, resilient UI patterns, and data-driven design principles — crafted to demonstrate real-world problem-solving, scalability, and developer craftsmanship.
-
-“Build your own dashboard. Shape your own data story.” 📊
