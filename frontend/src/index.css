@@ -1,3 +1,203 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* React Grid Layout - Resize Handle Styling */
+.react-resizable-handle {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  background-repeat: no-repeat;
+  background-origin: content-box;
+  box-sizing: border-box;
+  background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2IDYiIHN0eWxlPSJiYWNrZ3JvdW5kLWNvbG9yOiNmZmZmZmYwMCIgeD0iMHB4IiB5PSIwcHgiIHdpZHRoPSI2cHgiIGhlaWdodD0iNnB4Ij48ZyBvcGFjaXR5PSIwLjMwMiI+PHBhdGggZD0iTSA2IDYgTCAwIDYgTCAwIDQuMiBMIDQgNC4yIEwgNC4yIDQuMiBMIDQuMiAwIEwgNiAwIEwgNiA2IEwgNiA2IFoiIGZpbGw9IiMwMDAwMDAiLz48L2c+PC9zdmc+');
+  background-position: bottom right;
+  padding: 0 3px 3px 0;
+}
+
+.react-resizable-handle-se {
+  bottom: 0;
+  right: 0;
+  cursor: se-resize;
+}
+
+/* Make resize handle more visible */
+.react-grid-item:hover .react-resizable-handle-se::after {
+  content: "";
+  position: absolute;
+  right: 3px;
+  bottom: 3px;
+  width: 8px;
+  height: 8px;
+  border-right: 3px solid #3b82f6;
+  border-bottom: 3px solid #3b82f6;
+}
+
+/* Enhanced Resize Handle Visibility */
+.react-grid-item {
+  position: relative;
+}
+
+.react-grid-item > .react-resizable-handle {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  bottom: 0;
+  right: 0;
+  cursor: se-resize;
+  z-index: 10;
+}
+
+.react-grid-item > .react-resizable-handle::after {
+  content: "";
+  position: absolute;
+  right: 3px;
+  bottom: 3px;
+  width: 10px;
+  height: 10px;
+  border-right: 3px solid rgba(59, 130, 246, 0.5);
+  border-bottom: 3px solid rgba(59, 130, 246, 0.5);
+  transition: all 0.2s;
+}
+
+.react-grid-item:hover > .react-resizable-handle::after {
+  border-right-color: #3b82f6;
+  border-bottom-color: #3b82f6;
+  width: 12px;
+  height: 12px;
+}
+
+/* Prevent widget content from blocking resize handle */
+.react-grid-item > div:first-child {
+  pointer-events: none;
+}
+
+.react-grid-item > div:first-child * {
+  pointer-events: auto;
+}
+
+/* Make buttons always clickable */
+.react-grid-item button {
+  pointer-events: auto !important;
+  z-index: 100;
+}
+
+/* ============================================
+   DASHBOARD CANVAS - ENHANCED INTERACTIONS
+   ============================================ */
+
+/* Drag Handle */
+.drag-handle {
+  pointer-events: auto !important;
+}
+
+/* Widget Container */
+.react-grid-item {
+  transition: all 200ms ease;
+  transition-property: left, top, width, height;
+}
+
+.react-grid-item.cssTransforms {
+  transition-property: transform, width, height;
+}
+
+.react-grid-item.resizing {
+  transition: none;
+  z-index: 100;
+  opacity: 0.9;
+}
+
+.react-grid-item.react-draggable-dragging {
+  transition: none;
+  z-index: 100;
+  opacity: 0.9;
+}
+
+/* Placeholder during drag */
+.react-grid-item.react-grid-placeholder {
+  background: rgb(59, 130, 246);
+  opacity: 0.2;
+  transition-duration: 100ms;
+  z-index: 2;
+  border-radius: 8px;
+  border: 2px dashed rgb(59, 130, 246);
+}
+
+/* ============================================
+   RESIZE HANDLE - HIGHLY VISIBLE
+   ============================================ */
+
+.react-resizable-handle {
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  bottom: 0;
+  right: 0;
+  cursor: se-resize;
+  z-index: 50;
+  padding: 0;
+}
+
+.react-resizable-handle-se {
+  bottom: 0;
+  right: 0;
+  cursor: se-resize;
+}
+
+/* Visual resize indicator */
+.react-resizable-handle::after {
+  content: "";
+  position: absolute;
+  right: 4px;
+  bottom: 4px;
+  width: 12px;
+  height: 12px;
+  border-right: 3px solid rgba(59, 130, 246, 0.4);
+  border-bottom: 3px solid rgba(59, 130, 246, 0.4);
+  transition: all 0.2s ease;
+}
+
+/* Hover state - more visible */
+.react-grid-item:hover .react-resizable-handle::after {
+  border-right-color: rgb(59, 130, 246);
+  border-bottom-color: rgb(59, 130, 246);
+  width: 14px;
+  height: 14px;
+  border-width: 4px;
+}
+
+/* During resize - bright and obvious */
+.react-grid-item.resizing .react-resizable-handle::after {
+  border-right-color: rgb(239, 68, 68);
+  border-bottom-color: rgb(239, 68, 68);
+  width: 16px;
+  height: 16px;
+  border-width: 4px;
+}
+
+/* ============================================
+   BUTTON INTERACTIONS
+   ============================================ */
+
+/* Ensure buttons are always clickable */
+.react-grid-item button {
+  pointer-events: auto !important;
+  cursor: pointer !important;
+  position: relative;
+  z-index: 100;
+}
+
+/* Widget content shouldn't block interactions */
+.react-grid-item > div {
+  pointer-events: none;
+}
+
+/* But content inside should work normally */
+.react-grid-item > div * {
+  pointer-events: auto;
+}
+
+/* Except the drag handle overlay */
+.drag-handle ~ div {
+  pointer-events: auto;
+}

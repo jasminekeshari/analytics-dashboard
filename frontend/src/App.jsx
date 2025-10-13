@@ -20,16 +20,6 @@ const queryClient = new QueryClient({
   },
 });
 
-/**
- * Main App Component
- * 
- * Structure:
- * 1. Auth Check (show login if not authenticated)
- * 2. Top Navigation Bar
- * 3. Dashboard Canvas (main content)
- * 4. Widget Gallery (sidebar)
- */
-
 function AppContent() {
   const { isAuthenticated, user, logout } = useAuthStore();
   const { 
@@ -57,7 +47,6 @@ function AppContent() {
       if (dashboards.length > 0) {
         setDashboard(dashboards[0]);
       } else {
-        // Create a new empty dashboard
         const newDashboard = {
           id: 'default',
           name: 'My Dashboard',
@@ -68,7 +57,6 @@ function AppContent() {
       }
     } catch (error) {
       console.error('Failed to load dashboard:', error);
-      // Create empty dashboard on error
       setDashboard({
         id: 'default',
         name: 'My Dashboard',
@@ -93,7 +81,6 @@ function AppContent() {
     }
   };
   
-  // Show login if not authenticated
   if (!isAuthenticated) {
     return <Login />;
   }
@@ -104,7 +91,6 @@ function AppContent() {
       <nav className="bg-white border-b border-gray-200 shadow-sm">
         <div className="px-6 py-4">
           <div className="flex items-center justify-between">
-            {/* Left: Logo & Dashboard Name */}
             <div className="flex items-center gap-4">
               <div className="flex items-center gap-2">
                 <LayoutDashboard className="w-8 h-8 text-blue-600" />
@@ -119,9 +105,7 @@ function AppContent() {
               )}
             </div>
             
-            {/* Right: Actions & User */}
             <div className="flex items-center gap-3">
-              {/* Undo/Redo */}
               <div className="flex items-center gap-1 mr-2">
                 <button
                   onClick={undo}
@@ -141,7 +125,6 @@ function AppContent() {
                 </button>
               </div>
               
-              {/* Add Widget Button */}
               <button
                 onClick={() => setIsGalleryOpen(true)}
                 className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
@@ -150,7 +133,6 @@ function AppContent() {
                 Add Widget
               </button>
               
-              {/* Save Button */}
               <button
                 onClick={handleSave}
                 disabled={isSaving}
@@ -160,7 +142,6 @@ function AppContent() {
                 {isSaving ? 'Saving...' : 'Save'}
               </button>
               
-              {/* User Menu */}
               <div className="flex items-center gap-3 pl-3 border-l border-gray-300">
                 <div className="text-right">
                   <p className="text-sm font-medium text-gray-800">{user?.name}</p>
@@ -189,6 +170,9 @@ function AppContent() {
         isOpen={isGalleryOpen} 
         onClose={() => setIsGalleryOpen(false)} 
       />
+      
+      {/* Widget Configuration Modal */}
+      <WidgetConfigPanel />
     </div>
   );
 }
@@ -200,3 +184,19 @@ export default function App() {
     </QueryClientProvider>
   );
 }
+
+{/* DEBUG: Test notes update */}
+<button
+  onClick={() => {
+    const notesWidget = currentDashboard?.layout?.find(w => w.widgetType === 'notes.markdown');
+    if (notesWidget) {
+      console.log('Current notes widget:', notesWidget);
+      alert('Notes content: ' + notesWidget.config.content);
+    } else {
+      alert('No notes widget found!');
+    }
+  }}
+  className="px-3 py-1 bg-purple-600 text-white rounded text-sm"
+>
+  🔍 Check Notes
+</button>

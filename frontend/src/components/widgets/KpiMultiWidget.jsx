@@ -1,98 +1,97 @@
-// frontend/src/components/widgets/WidgetRenderer.jsx
-import { lazy, Suspense } from 'react';
-import { ErrorBoundary } from 'react-error-boundary';
-import { WIDGET_TYPES } from './widgetRegistry';
+// frontend/src/components/widgets/KpiMultiWidget.jsx
+import { useQuery } from '@tanstack/react-query';
+import { TrendingUp, TrendingDown } from 'lucide-react';
+import { api } from '../../lib/api';
+import { formatValue, formatPercent } from '../../utils/helpers';
 
 /**
- * Widget Renderer - Dynamically renders widgets with error boundaries
+ * Multi-KPI Widget - Display multiple metrics in one card
  * 
- * This component:
- * - Lazy loads widgets (code splitting for performance)
- * - Wraps each widget in an error boundary (if one breaks, others still work)
- * - Shows loading states while widgets load
+ * Shows 2-3 KPIs side by side for quick comparison
+ * Perfect for dashboard overview sections
  */
 
-// Lazy load widgets for better performance (only load when needed)
-const KpiSimpleWidget = lazy(() => import('./KpiSimpleWidget'));
-const KpiMultiWidget = lazy(() => import('./KpiMultiWidget'));
-const TimeSeriesWidget = lazy(() => import('./TimeSeriesWidget'));
-const BarChartWidget = lazy(() => import('./BarChartWidget'));
-const PieChartWidget = lazy(() => import('./PieChartWidget'));
-const OrdersTableWidget = lazy(() => import('./OrdersTableWidget'));
-const UsersTableWidget = lazy(() => import('./UsersTableWidget'));
-const MarkdownWidget = lazy(() => import('./MarkdownWidget'));
-
-// Fallback component when a widget crashes
-function ErrorFallback({ error, resetErrorBoundary }) {
-  return (
-    <div className="h-full w-full flex items-center justify-center bg-red-50 rounded-lg border-2 border-red-200">
-      <div className="text-center p-4">
-        <h3 className="text-red-700 font-semibold mb-2">Widget Error</h3>
-        <p className="text-red-600 text-sm mb-3">{error.message}</p>
-        <button
-          onClick={resetErrorBoundary}
-          className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors"
-        >
-          Try Again
-        </button>
-      </div>
-    </div>
-  );
-}
-
-// Loading skeleton while widget loads
-function WidgetSkeleton() {
-  return (
-    <div className="h-full w-full flex items-center justify-center bg-white rounded-lg border border-gray-200">
-      <div className="flex flex-col items-center gap-2">
-        <div className="animate-spin h-8 w-8 border-4 border-blue-500 border-t-transparent rounded-full"></div>
-        <p className="text-sm text-gray-500">Loading widget...</p>
-      </div>
-    </div>
-  );
-}
-
-export default function WidgetRenderer({ widgetType, config }) {
-  // Select the appropriate widget component
-  const getWidgetComponent = () => {
-    switch (widgetType) {
-      case WIDGET_TYPES.KPI_SIMPLE:
-        return KpiSimpleWidget;
-      case WIDGET_TYPES.KPI_MULTI:
-        return KpiMultiWidget;
-      case WIDGET_TYPES.TIMESERIES:
-        return TimeSeriesWidget;
-      case WIDGET_TYPES.BAR:
-        return BarChartWidget;
-      case WIDGET_TYPES.PIE:
-        return PieChartWidget;
-      case WIDGET_TYPES.ORDERS_TABLE:
-        return OrdersTableWidget;
-      case WIDGET_TYPES.USERS_TABLE:
-        return UsersTableWidget;
-      // Add more widgets here as you create them
-      default:
-        return () => (
-          <div className="h-full w-full flex items-center justify-center bg-gray-50 rounded-lg border border-gray-300">
-            <p className="text-gray-600">Unknown widget: {widgetType}</p>
-          </div>
-        );
-    }
-  };
+export default function KpiMultiWidget({ config }) {
+  const { metrics = ['todaySales', 'ordersToday', 'convRate'] } = config;
   
-  const WidgetComponent = getWidgetComponent();
+  // Fetch multi-KPI data
+  const { data, isLoading, isError, refetch } = useQuery({
+    queryKey: ['kpi-multi', metrics.join(',')],
+    queryFn: () => api.getMultiKPI(metrics),
+    refetchInterval: 60000,
+  });
+  
+  // Loading state
+  if (isLoading) {
+    return (
+      <div className="h-full w-full flex items-center justify-center bg-white rounded-lg border border-gray-200">
+        <div className="flex flex-col items-center gap-2">
+          <div className="animate-spin h-8 w-8 border-4 border-blue-500 border-t-transparent rounded-full"></div>
+          <p className="text-sm text-gray-500">Loading KPIs...</p>
+        </div>
+      </div>
+    );
+  }
+  
+  // Error state
+  if (isError) {
+    return (
+      <div className="h-full w-full flex items-center justify-center bg-white rounded-lg border border-red-200">
+        <div className="text-center p-4">
+          <p className="text-red-600 font-medium mb-2">Failed to load KPIs</p>
+          <button
+            onClick={() => refetch()}
+            className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 transition-colors"
+          >
+            Retry
+          </button>
+        </div>
+      </div>
+    );
+  }
+  
+  // Empty state
+  if (!data?.items || data.items.length === 0) {
+    return (
+      <div className="h-full w-full flex items-center justify-center bg-white rounded-lg border border-gray-200">
+        <p className="text-gray-500">No data available</p>
+      </div>
+    );
+  }
   
   return (
-    <ErrorBoundary
-      FallbackComponent={ErrorFallback}
-      onReset={() => {
-        // Reset widget state if needed
-        console.log('Widget reset:', widgetType);
-      }}
-    >
-      <Suspense fallback={<WidgetSkeleton />}>
-        <WidgetComponent config={config} />
-      </Suspense>
-    </ErrorBoundary>
+    <div className="h-full w-full bg-white rounded-lg border border-gray-200 p-4 shadow-sm hover:shadow-md transition-shadow">
+      <div className="h-full grid grid-cols-3 gap-4">
+        {data.items.map((kpi, index) => {
+          const isPositive = kpi.delta >= 0;
+          const deltaColor = isPositive ? 'text-green-600' : 'text-red-600';
+          const TrendIcon = isPositive ? TrendingUp : TrendingDown;
+          const bgColor = index === 0 ? 'bg-blue-50' : index === 1 ? 'bg-purple-50' : 'bg-green-50';
+          
+          return (
+            <div 
+              key={index} 
+              className={`${bgColor} rounded-lg p-4 flex flex-col justify-between transition-all hover:shadow-md`}
+            >
+              {/* Label */}
+              <div className="text-xs font-medium text-gray-600 mb-2">
+                {kpi.label}
+              </div>
+              
+              {/* Value */}
+              <div className="text-2xl font-bold text-gray-900 mb-2">
+                {formatValue(kpi.value, kpi.unit, kpi.unit === '%' ? 1 : 0)}
+              </div>
+              
+              {/* Delta */}
+              <div className={`flex items-center gap-1 text-xs font-medium ${deltaColor}`}>
+                <TrendIcon className="w-3 h-3" />
+                <span>{formatPercent(kpi.delta)}</span>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
   );
 }

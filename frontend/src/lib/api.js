@@ -1,5 +1,7 @@
 // frontend/src/lib/api.js
-const API_BASE_URL = 'http://localhost:4000';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:4000';
+
+
 
 // Helper function to make API calls with error handling
 async function fetchAPI(endpoint, options = {}) {

@@ -4,15 +4,6 @@ import { X, Save } from 'lucide-react';
 import useDashboardStore from '../../store/dashboardStore';
 import { getWidgetDefinition } from '../widgets/widgetRegistry';
 
-/**
- * Widget Configuration Panel - Modal to edit widget settings
- * 
- * Shows different form fields based on widget type:
- * - Title
- * - Data source
- * - Display options (limit, precision, etc.)
- */
-
 export default function WidgetConfigPanel() {
   const { selectedWidget, currentDashboard, updateWidgetConfig, clearSelection } = useDashboardStore();
   
@@ -25,12 +16,17 @@ export default function WidgetConfigPanel() {
       if (widget) {
         setConfig({ ...widget.config });
       }
+    } else {
+      setConfig(null);
     }
   }, [selectedWidget, currentDashboard]);
   
-  if (!selectedWidget || !config) return null;
+  // Don't render if no widget selected or no config loaded
+  if (!selectedWidget || !config || !currentDashboard) return null;
   
   const widget = currentDashboard.layout.find(w => w.i === selectedWidget);
+  if (!widget) return null;
+  
   const definition = getWidgetDefinition(widget.widgetType);
   
   const handleSave = () => {
@@ -46,7 +42,7 @@ export default function WidgetConfigPanel() {
   const renderConfigFields = () => {
     const widgetType = widget.widgetType;
     
-    // Common: Title field (all widgets have title)
+    // Common: Title field
     const titleField = (
       <div key="title">
         <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -267,6 +263,43 @@ export default function WidgetConfigPanel() {
       );
     }
     
+    // Markdown/Notes Widget
+    if (widgetType === 'notes.markdown') {
+      return (
+        <>
+          {titleField}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Content (Markdown)
+            </label>
+            <textarea
+              value={config.content || ''}
+              onChange={(e) => setConfig({ ...config, content: e.target.value })}
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent font-mono text-sm resize-none"
+              placeholder="# Heading&#10;&#10;Your notes here...&#10;&#10;- Bullet point&#10;**Bold text**"
+              rows={12}
+            />
+            <p className="text-xs text-gray-500 mt-2">
+              💡 Supports: <code className="bg-gray-100 px-1 rounded"># headings</code>, <code className="bg-gray-100 px-1 rounded">**bold**</code>, <code className="bg-gray-100 px-1 rounded">- bullets</code>
+            </p>
+          </div>
+        </>
+      );
+    }
+    
+    // Multi-KPI (no config needed, just title)
+    if (widgetType === 'kpi.multi') {
+      return (
+        <>
+          <div>
+            <p className="text-sm text-gray-600 mb-4">
+              This widget displays Sales, Orders, and Conversion Rate metrics.
+            </p>
+          </div>
+        </>
+      );
+    }
+    
     // Default
     return titleField;
   };
@@ -275,17 +308,17 @@ export default function WidgetConfigPanel() {
     <>
       {/* Backdrop */}
       <div 
-        className="fixed inset-0 bg-black bg-opacity-50 z-50"
+        className="fixed inset-0 bg-black bg-opacity-50 z-[200]"
         onClick={handleCancel}
       />
       
       {/* Modal */}
-      <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white rounded-2xl shadow-2xl z-50 w-full max-w-md">
+      <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white rounded-2xl shadow-2xl z-[201] w-full max-w-md">
         {/* Header */}
         <div className="p-6 border-b border-gray-200 flex items-center justify-between">
           <div>
             <h2 className="text-2xl font-bold text-gray-800">Configure Widget</h2>
-            <p className="text-sm text-gray-600 mt-1">{definition?.title}</p>
+            <p className="text-sm text-gray-600 mt-1">{definition?.title || 'Widget Settings'}</p>
           </div>
           <button
             onClick={handleCancel}
