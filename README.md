@@ -1,214 +1,275 @@
-# 📊 Analytics Dashboard
+📊 Design Your Own Analytics Dashboard
+🧠 A customizable, interactive analytics platform built with React, where users can design, configure, and manage their own dashboards — featuring real-time data visualization, drag-and-drop widgets, and persistent layouts.
 
-A modern, customizable analytics dashboard built with React, featuring drag-and-drop widgets, real-time data visualization, and a beautiful UI.
+🔗 Live Demo: https://your-own-analytics-dashboard.netlify.app/
 
-<img width="1366" height="768" alt="Screenshot (134)" src="https://github.com/user-attachments/assets/455add24-e68c-4ac6-af5a-21783e0c1b2e" />
+💻 GitHub: https://github.com/jasminekeshari/analytics-dashboard
 
+🚀 Overview
 
+Analytics Dashboard is a fully dynamic and customizable web application designed for data-driven professionals who want to visualize and interact with their analytics in their own way.
 
-## ✨ Features
+Users can:
 
-- 🎨 **Beautiful UI** - Modern design with Tailwind CSS
-- 🖱️ **Drag & Drop** - Rearrange widgets freely
-- 📐 **Resizable Widgets** - Customize widget sizes
-- 📊 **8 Widget Types** - Charts, tables, KPIs, and notes
-- ⚙️ **Configurable** - Edit widget settings on the fly
-- ↩️ **Undo/Redo** - Track up to 10 layout changes
-- 🔐 **Mock Authentication** - Editor and Viewer roles
-- 📱 **Responsive** - Works on all screen sizes
-- ⚡ **Fast Performance** - Code splitting and lazy loading
-- 🛡️ **Error Boundaries** - One broken widget won't crash the dashboard
+Build dashboards using drag-and-drop widgets
 
-## 🚀 Quick Start
+Configure each widget (data source, title, visualization type, etc.)
 
-### Prerequisites
+Resize, duplicate, or remove widgets freely
 
-- Node.js v18+ installed
-- npm or yarn package manager
+Persist layouts between sessions
 
-### Installation
+Simulate real-world data APIs and error handling
 
-1. **Clone the repository**
-```bash
+Switch between Editor (can modify) and Viewer (read-only) roles
+
+This project demonstrates strong front-end architecture, state management, and data visualization skills with clean code, TypeScript safety, and modern UI principles.
+
+✨ Key Features
+Category	Feature	Description
+🎨 UI	Modern Design	Beautiful, minimal UI built with Tailwind CSS
+🧩 Widgets	8 Types Available	Charts, tables, KPIs, and markdown notes
+🖱️ Interactions	Drag, Resize, Reorder	Intuitive grid-based widget manipulation
+⚙️ Customization	Configurable Widgets	Edit titles, data sources, and appearance live
+💾 Persistence	Local Storage Save	Dashboards are saved and loaded automatically
+🔁 Undo/Redo	Mini History (10 steps)	Reverse accidental layout changes
+🔐 Auth System	Mock Login with Roles	Viewer (read-only) and Editor (full access)
+🧱 Error Handling	Widget Error Boundaries	One broken widget won’t crash the whole app
+📱 Responsive	Mobile-Friendly	Adaptive design for all screen sizes
+⚡ Performance	Code Splitting	Lazy-loaded widgets improve load speed
+🧭 Use Case
+
+This app can serve as a template or starter project for:
+
+Product Analytics Dashboards
+
+Admin Panels / BI Tools
+
+Team Performance Tracking
+
+KPI Reporting Interfaces
+
+Client-Facing Insights Portals
+
+It helps organizations or individuals visualize performance metrics, track progress, and make data-informed decisions in a customizable and interactive way.
+
+🛠️ Tech Stack
+Frontend
+
+⚛️ React 18
+
+⚡ Vite
+
+🎨 Tailwind CSS
+
+🧠 Zustand (state management)
+
+🔄 TanStack React Query (data fetching)
+
+📈 Recharts (charts)
+
+🧾 react-hook-form + Zod (form & validation)
+
+📐 react-grid-layout (drag & resize system)
+
+🧩 Lucide React (icons)
+
+Backend (Mock API)
+
+🟢 Node.js + Express
+
+🧰 json-server (mock endpoints)
+
+🔁 Simulated latency + random errors for realism
+
+🌐 CORS enabled
+
+📁 Project Structure
+analytics-dashboard/
+├── backend/              
+│   ├── server.js        # Express + json-server mock API
+│   └── seed.json        # Mock data sources
+│
+├── frontend/            
+│   ├── src/
+│   │   ├── components/
+│   │   │   ├── auth/          # Login & role management
+│   │   │   ├── dashboard/     # Canvas, Gallery, Config Panel
+│   │   │   ├── widgets/       # All widget types (charts, tables, etc.)
+│   │   │   └── common/        # Shared UI elements
+│   │   ├── store/             # Zustand stores (auth, dashboard)
+│   │   ├── lib/               # API clients, hooks
+│   │   ├── utils/             # Helper functions
+│   │   └── App.jsx            # Root component
+│   └── package.json
+│
+└── README.md
+
+🎯 Available Widgets
+Charts
+
+📈 Time Series Chart — Line chart showing trends over time
+
+📊 Bar Chart — Compare category-wise values
+
+🍩 Pie Chart — Display proportional data
+
+Tables
+
+📋 Orders Table — Paginated table with sorting/filtering
+
+👥 Users Table — Filter users by role or status
+
+KPIs
+
+💰 Single KPI — Shows one key metric with delta change
+
+📊 Multi KPI — Displays 2–3 metrics in a single card
+
+Other
+
+📝 Markdown Notes — Add formatted documentation or notes
+
+⚡ Quick Start Guide
+Prerequisites
+
+Node.js v18+
+
+npm or yarn
+
+Installation
+# Clone the repository
 git clone https://github.com/jasminekeshari/analytics-dashboard
 cd analytics-dashboard
-```
 
-2. **Install dependencies**
-
-```bash
-# Install backend dependencies
+Backend Setup
 cd backend
 npm install
+node server.js
 
-# Install frontend dependencies
+
+Mock API runs at 👉 http://localhost:4000
+
+Frontend Setup
 cd ../frontend
 npm install
-```
-
-3. **Start the backend server**
-
-```bash
-cd backend
-node server.js
-```
-
-The API will run on `http://localhost:4000`
-
-4. **Start the frontend** (in a new terminal)
-
-```bash
-cd frontend
 npm run dev
-```
 
-The app will open at `http://localhost:5173`
 
-5. **Login**
+App runs at 👉 http://localhost:5173
 
-Enter any email and password to login. Choose "Editor" role to edit dashboards or "Viewer" for read-only access.
+Login
 
-## 📁 Project Structure
+Use any email/password to log in.
+Choose:
 
-```
-analytics-dashboard/
-├── backend/              # Mock API server
-│   ├── server.js        # Express server with mock data
-│   └── package.json
-├── frontend/            # React application
-│   ├── src/
-│   │   ├── components/  # UI components
-│   │   │   ├── auth/    # Login component
-│   │   │   ├── dashboard/ # Canvas, Gallery, Config
-│   │   │   ├── widgets/   # All widget types
-│   │   │   └── common/    # Reusable components
-│   │   ├── store/       # Zustand state management
-│   │   │   ├── authStore.js
-│   │   │   └── dashboardStore.js
-│   │   ├── lib/         # API client
-│   │   ├── utils/       # Helper functions
-│   │   └── App.jsx      # Main app component
-│   └── package.json
-└── README.md
-```
+Editor → Full access (edit dashboard)
 
-## 🎯 Available Widgets
+Viewer → Read-only view
 
-### Charts
-- **Time Series Chart** - Line chart showing trends over time
-- **Bar Chart** - Compare values across categories
-- **Pie Chart** - Show distribution as percentages
+⚙️ Environment Variables
 
-### Tables
-- **Orders Table** - View and filter orders with pagination
-- **Users Table** - Manage users with role filters
+Create .env in the frontend folder:
 
-### KPIs
-- **Single KPI** - Display one key metric with trend
-- **Multi KPI** - Show 2-3 metrics side by side
+VITE_API_BASE_URL=http://localhost:4000
 
-### Other
-- **Notes** - Add markdown-formatted documentation
 
-## 🛠️ Tech Stack
+For production, update this to your deployed backend URL.
 
-### Frontend
-- **React 18** - UI library
-- **Vite** - Lightning-fast build tool
-- **Tailwind CSS** - Utility-first styling
-- **Zustand** - Lightweight state management
-- **TanStack Query** - Data fetching and caching
-- **react-grid-layout** - Drag and drop grid system
-- **Recharts** - Beautiful charts
-- **react-hook-form + Zod** - Form handling and validation
-- **Lucide React** - Icon library
+🧠 Core Concepts Explained
+🧩 Drag & Drop
 
-### Backend
-- **Node.js + Express** - Mock API server
-- **CORS** - Cross-origin resource sharing
+Powered by react-grid-layout, enabling smooth drag, resize, and reorder interactions on a responsive 12-column grid.
 
-## 🎨 Key Features Explained
+🔁 Undo/Redo
 
-### Drag & Drop
-Uses `react-grid-layout` for smooth drag and resize interactions. Each widget snaps to a 12-column grid system.
+Implemented via a history stack storing the last 10 layout operations. Supports deep cloning for accurate state recovery.
 
-### Undo/Redo
-Implemented with a history stack that stores up to 10 previous states. Uses deep cloning to prevent reference issues.
+🧱 Error Boundaries
 
-### Error Boundaries
-Each widget is wrapped in React Error Boundary. If one widget crashes, others continue working normally.
+Each widget is wrapped in its own boundary. If one fails, the rest remain functional — ensuring robust UI resilience.
 
-### Code Splitting
-Widgets are lazy-loaded using `React.lazy()` and `Suspense`. This reduces initial bundle size and improves load times.
+⚡ Code Splitting
 
-### Mock API Resilience
-The backend simulates real-world conditions with:
-- Random delays (200-600ms)
-- 10% error rate
-- Realistic mock data
+Widgets are lazy-loaded with React.lazy() and Suspense, reducing bundle size and improving startup performance.
 
-## 🧪 Testing
+🌍 Mock API Resilience
 
-```bash
+The mock backend:
+
+Adds 200–600ms latency
+
+Triggers 10% random errors
+
+Returns empty datasets occasionally
+This ensures widgets handle loading, empty, and error states gracefully.
+
+🧪 Testing
 cd frontend
 npm test
-```
 
-Tests cover:
-- Undo/Redo functionality
-- Configuration validators
-- API error handling
-- Widget rendering
 
-## 📦 Build for Production
+Includes Tests For:
 
-```bash
+History reducer (undo/redo)
+
+Config validators (Zod)
+
+API error mapper
+
+Widget rendering (loading → success → error)
+
+📦 Build for Production
 cd frontend
 npm run build
-```
 
-Production build will be in `frontend/dist/`
 
-## 🚀 Deployment
+Build output:
+frontend/dist/
 
-### Deploy to Vercel
+☁️ Deployment
+Deploy to Netlify or Vercel
 
-1. Push code to GitHub
-2. Go to [vercel.com](https://vercel.com)
-3. Import your repository
-4. Vercel will auto-detect Vite and deploy
+Push your code to GitHub
 
-### Environment Variables
+Go to vercel.com
+ or netlify.com
 
-Create `.env` in frontend folder:
+Import your repository
 
-```env
-VITE_API_BASE_URL=http://localhost:4000
-```
+Vercel/Netlify auto-detects Vite & deploys automatically
 
-For production, update to your deployed backend URL.
+🤝 Contributing
 
-## 🤝 Contributing
+Contributions are welcome!
+If you’d like to improve features or fix bugs, feel free to open a Pull Request or create an issue.
 
-Contributions are welcome! Please feel free to submit a Pull Request.
+📝 License
 
-## 📝 License
+MIT License — Free for personal or commercial use.
+Use this project as a learning resource or boilerplate for your own analytics dashboard projects.
 
-MIT License - feel free to use this project for learning or commercial purposes.
+👤 Author
 
-## 👤 Author
+Jasmine Keshari
+🌐 GitHub: github.com/jasminekeshari
 
-**Your Name**
-- GitHub: https://github.com/jasminekeshari
-- LinkedIn:
+💼 LinkedIn: 
 
-## 🙏 Acknowledgments
+🙏 Acknowledgments
 
-- React Grid Layout for the amazing drag & drop functionality
-- Recharts for beautiful charting components
-- Tailwind CSS for making styling a breeze
-- The React community for excellent documentation
+🧱 React Grid Layout — for the drag & drop grid system
 
----
+📊 Recharts — for beautiful charts and graphs
 
-Made with ❤️ for the interview assignment
+🎨 Tailwind CSS — for rapid, modern UI styling
+
+🧠 React Query — for smooth async data management
+
+❤️ React Community — for documentation and libraries
+
+💡 Final Note
+
+This project showcases modern React architecture, resilient UI patterns, and data-driven design principles — crafted to demonstrate real-world problem-solving, scalability, and developer craftsmanship.
+
+“Build your own dashboard. Shape your own data story.” 📊
