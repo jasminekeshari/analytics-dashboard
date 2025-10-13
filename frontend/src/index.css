@@ -201,3 +201,105 @@
 .drag-handle ~ div {
   pointer-events: auto;
 }
+
+/* CRITICAL: React Grid Layout Fixes */
+.react-grid-layout {
+  position: relative;
+  transition: height 200ms ease;
+}
+
+.react-grid-item {
+  transition: all 200ms ease;
+  transition-property: left, top;
+  cursor: move;
+}
+
+.react-grid-item img {
+  pointer-events: none;
+  user-select: none;
+}
+
+.react-grid-item > .react-resizable-handle {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+}
+
+.react-grid-item > .react-resizable-handle::after {
+  content: "";
+  position: absolute;
+  right: 3px;
+  bottom: 3px;
+  width: 5px;
+  height: 5px;
+  border-right: 2px solid rgba(0, 0, 0, 0.4);
+  border-bottom: 2px solid rgba(0, 0, 0, 0.4);
+}
+
+.react-resizable-handle-se {
+  bottom: 0;
+  right: 0;
+  cursor: se-resize;
+}
+
+.react-grid-item.resizing {
+  z-index: 100;
+  will-change: width, height;
+}
+
+.react-grid-item.react-draggable-dragging {
+  transition: none;
+  z-index: 100;
+  will-change: transform;
+}
+
+.react-grid-item.dropping {
+  visibility: hidden;
+}
+
+.react-grid-item.react-grid-placeholder {
+  background: #3b82f6;
+  opacity: 0.2;
+  transition-duration: 100ms;
+  z-index: 2;
+  border-radius: 4px;
+}
+
+/* Make sure buttons are always clickable */
+.react-grid-item button {
+  cursor: pointer !important;
+  z-index: 100 !important;
+  position: relative;
+}
+
+/* CRITICAL: Make buttons work with drag-drop */
+.no-drag {
+  pointer-events: auto !important;
+  cursor: pointer !important;
+}
+
+.no-drag button {
+  pointer-events: auto !important;
+  cursor: pointer !important;
+  z-index: 9999 !important;
+}
+
+.react-grid-item {
+  cursor: move;
+  position: relative;
+}
+
+/* Prevent widget content from blocking buttons */
+.react-grid-item > div:last-child {
+  pointer-events: none;
+}
+
+.react-grid-item > div:last-child * {
+  pointer-events: auto;
+}
+
+/* But allow buttons to work */
+.no-drag,
+.no-drag * {
+  pointer-events: auto !important;
+}

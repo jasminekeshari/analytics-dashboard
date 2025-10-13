@@ -30,15 +30,20 @@ export default function WidgetConfigPanel() {
   const definition = getWidgetDefinition(widget.widgetType);
   
  const handleSave = () => {
-  console.log('💾 Saving config:', config);
-  updateWidgetConfig(selectedWidget, config);
-  clearSelection();
+  console.log('💾 [1] Save button clicked');
+  console.log('💾 [2] Widget ID:', selectedWidget);
+  console.log('💾 [3] New config:', config);
   
-  // Force a small delay to ensure state updates
+  updateWidgetConfig(selectedWidget, config);
+  
+  console.log('💾 [4] updateWidgetConfig called');
+  
   setTimeout(() => {
-    console.log('✅ Config saved!');
+    console.log('💾 [5] Closing modal');
+    clearSelection();
   }, 100);
 };
+
   const handleCancel = () => {
     clearSelection();
   };
@@ -269,28 +274,32 @@ export default function WidgetConfigPanel() {
     }
     
     // Markdown/Notes Widget
-    if (widgetType === 'notes.markdown') {
-      return (
-        <>
-          {titleField}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Content (Markdown)
-            </label>
-            <textarea
-              value={config.content || ''}
-              onChange={(e) => setConfig({ ...config, content: e.target.value })}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent font-mono text-sm resize-none"
-              placeholder="# Heading&#10;&#10;Your notes here...&#10;&#10;- Bullet point&#10;**Bold text**"
-              rows={12}
-            />
-            <p className="text-xs text-gray-500 mt-2">
-              💡 Supports: <code className="bg-gray-100 px-1 rounded"># headings</code>, <code className="bg-gray-100 px-1 rounded">**bold**</code>, <code className="bg-gray-100 px-1 rounded">- bullets</code>
-            </p>
-          </div>
-        </>
-      );
-    }
+    // Markdown/Notes Widget
+if (widgetType === 'notes.markdown') {
+  return (
+    <>
+      {titleField}
+      <div>
+        <label className="block text-sm font-medium text-gray-700 mb-2">
+          Content
+        </label>
+        <textarea
+          value={config.content || ''}
+          onChange={(e) => {
+            console.log('📝 Textarea changed:', e.target.value);
+            setConfig({ ...config, content: e.target.value });
+          }}
+          className="w-full px-3 py-2 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 font-mono text-sm resize-none"
+          placeholder="Type your notes here..."
+          rows={12}
+        />
+        <p className="text-xs text-gray-500 mt-2">
+          Just type plain text. It will appear in the widget.
+        </p>
+      </div>
+    </>
+  );
+}
     
     // Multi-KPI (no config needed, just title)
     if (widgetType === 'kpi.multi') {
