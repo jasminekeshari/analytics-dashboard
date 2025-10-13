@@ -29,11 +29,16 @@ export default function WidgetConfigPanel() {
   
   const definition = getWidgetDefinition(widget.widgetType);
   
-  const handleSave = () => {
-    updateWidgetConfig(selectedWidget, config);
-    clearSelection();
-  };
+ const handleSave = () => {
+  console.log('💾 Saving config:', config);
+  updateWidgetConfig(selectedWidget, config);
+  clearSelection();
   
+  // Force a small delay to ensure state updates
+  setTimeout(() => {
+    console.log('✅ Config saved!');
+  }, 100);
+};
   const handleCancel = () => {
     clearSelection();
   };
