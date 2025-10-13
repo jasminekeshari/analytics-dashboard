@@ -2,7 +2,8 @@
 
 A modern, customizable analytics dashboard built with React, featuring drag-and-drop widgets, real-time data visualization, and a beautiful UI.
 
-<img width="1366" height="768" alt="Screenshot (133)" src="https://github.com/user-attachments/assets/4b975455-0b0f-4bef-a282-92a186214cb6" />
+<img width="1366" height="768" alt="Screenshot (134)" src="https://github.com/user-attachments/assets/455add24-e68c-4ac6-af5a-21783e0c1b2e" />
+
 
 
 ## ✨ Features
