@@ -303,3 +303,120 @@
 .no-drag * {
   pointer-events: auto !important;
 }
+
+/* ============================================
+   MOBILE & RESPONSIVE FIXES
+   ============================================ */
+
+/* Prevent overscroll */
+body {
+  overscroll-behavior: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Mobile: Disable drag, enable smooth scroll */
+@media (max-width: 768px) {
+  .react-grid-item {
+    cursor: default !important;
+    touch-action: pan-y !important;
+  }
+  
+  .react-resizable-handle {
+    display: none !important;
+  }
+  
+  /* Compact spacing on mobile */
+  .layout {
+    min-height: auto !important;
+  }
+}
+
+/* Desktop: Enable drag */
+@media (min-width: 769px) {
+  .react-grid-item {
+    cursor: move;
+    touch-action: none;
+  }
+}
+
+/* Make buttons always work */
+.no-drag {
+  pointer-events: auto !important;
+  cursor: pointer !important;
+  touch-action: manipulation !important;
+}
+
+.no-drag button {
+  pointer-events: auto !important;
+  cursor: pointer !important;
+  z-index: 9999 !important;
+  touch-action: manipulation !important;
+}
+
+/* Prevent content from blocking buttons */
+.react-grid-item > div:last-child {
+  pointer-events: none;
+}
+
+.react-grid-item > div:last-child * {
+  pointer-events: auto;
+}
+
+.no-drag,
+.no-drag * {
+  pointer-events: auto !important;
+}
+
+/* Compact grid on mobile */
+@media (max-width: 768px) {
+  .react-grid-layout {
+    margin: 0 !important;
+  }
+  
+  .react-grid-item {
+    margin-bottom: 8px !important;
+  }
+}
+
+/* Remove unnecessary whitespace */
+.layout {
+  min-height: fit-content !important;
+}
+
+/* Smooth transitions */
+.react-grid-item {
+  transition: all 200ms ease;
+  transition-property: left, top;
+}
+
+.react-grid-item.cssTransforms {
+  transition-property: transform;
+}
+
+/* Placeholder during drag */
+.react-grid-item.react-grid-placeholder {
+  background: #3b82f6;
+  opacity: 0.2;
+  border-radius: 8px;
+  border: 2px dashed #3b82f6;
+}
+
+/* Resize handle for desktop */
+@media (min-width: 769px) {
+  .react-grid-item > .react-resizable-handle::after {
+    content: "";
+    position: absolute;
+    right: 3px;
+    bottom: 3px;
+    width: 5px;
+    height: 5px;
+    border-right: 2px solid rgba(0, 0, 0, 0.4);
+    border-bottom: 2px solid rgba(0, 0, 0, 0.4);
+  }
+  
+  .react-resizable-handle-se {
+    bottom: 0;
+    right: 0;
+    cursor: se-resize;
+  }
+}

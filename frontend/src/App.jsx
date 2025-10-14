@@ -1,7 +1,7 @@
 // frontend/src/App.jsx
 import { useState, useEffect } from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { Plus, Undo, Redo, Save, LogOut, LayoutDashboard } from 'lucide-react';
+import { Plus, Undo, Redo, Save, LogOut, LayoutDashboard, Menu, X } from 'lucide-react';
 import useAuthStore from './store/authStore';
 import useDashboardStore from './store/dashboardStore';
 import { api } from './lib/api';
@@ -10,7 +10,6 @@ import DashboardCanvas from './components/dashboard/DashboardCanvas';
 import WidgetGallery from './components/dashboard/WidgetGallery';
 import WidgetConfigPanel from './components/dashboard/WidgetConfigPanel';
 
-// Create QueryClient for React Query
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -33,8 +32,8 @@ function AppContent() {
   
   const [isGalleryOpen, setIsGalleryOpen] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   
-  // Load default dashboard on mount
   useEffect(() => {
     if (isAuthenticated && !currentDashboard) {
       loadDefaultDashboard();
@@ -72,10 +71,10 @@ function AppContent() {
     setIsSaving(true);
     try {
       await api.updateDashboard(currentDashboard.id, currentDashboard);
-      alert('Dashboard saved successfully!');
+      alert('Dashboard saved!');
     } catch (error) {
       console.error('Save failed:', error);
-      alert('Failed to save dashboard');
+      alert('Failed to save');
     } finally {
       setIsSaving(false);
     }
@@ -87,30 +86,41 @@ function AppContent() {
   
   return (
     <div className="h-screen flex flex-col bg-gray-50">
-      {/* Top Navigation Bar */}
+      {/* Top Navigation Bar - RESPONSIVE */}
       <nav className="bg-white border-b border-gray-200 shadow-sm">
-        <div className="px-6 py-4">
-          <div className="flex items-center justify-between">
+        <div className="px-4 lg:px-6 py-3 lg:py-4">
+          {/* Mobile Layout */}
+          <div className="flex lg:hidden items-center justify-between">
+            <div className="flex items-center gap-2">
+              <LayoutDashboard className="w-6 h-6 text-blue-600" />
+              <h1 className="text-lg font-bold text-gray-800">Dashboard</h1>
+            </div>
+            <button
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="p-2 hover:bg-gray-100 rounded-lg"
+            >
+              {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            </button>
+          </div>
+          
+          {/* Desktop Layout */}
+          <div className="hidden lg:flex items-center justify-between">
             <div className="flex items-center gap-4">
               <div className="flex items-center gap-2">
                 <LayoutDashboard className="w-8 h-8 text-blue-600" />
-                <h1 className="text-2xl font-bold text-gray-800">
-                  Analytics Dashboard
-                </h1>
+                <h1 className="text-2xl font-bold text-gray-800">Analytics Dashboard</h1>
               </div>
               {currentDashboard && (
-                <span className="text-gray-500">
-                  / {currentDashboard.name}
-                </span>
+                <span className="text-gray-500">/ {currentDashboard.name}</span>
               )}
             </div>
             
-            <div className="flex items-center gap-3">
-              <div className="flex items-center gap-1 mr-2">
+            <div className="flex items-center gap-2">
+              <div className="flex items-center gap-1">
                 <button
                   onClick={undo}
                   disabled={!canUndo()}
-                  className="p-2 rounded-lg hover:bg-gray-100 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+                  className="p-2 rounded-lg hover:bg-gray-100 disabled:opacity-30 disabled:cursor-not-allowed"
                   title="Undo"
                 >
                   <Undo className="w-5 h-5 text-gray-700" />
@@ -118,7 +128,7 @@ function AppContent() {
                 <button
                   onClick={redo}
                   disabled={!canRedo()}
-                  className="p-2 rounded-lg hover:bg-gray-100 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+                  className="p-2 rounded-lg hover:bg-gray-100 disabled:opacity-30 disabled:cursor-not-allowed"
                   title="Redo"
                 >
                   <Redo className="w-5 h-5 text-gray-700" />
@@ -127,7 +137,7 @@ function AppContent() {
               
               <button
                 onClick={() => setIsGalleryOpen(true)}
-                className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
+                className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium"
               >
                 <Plus className="w-5 h-5" />
                 Add Widget
@@ -136,7 +146,7 @@ function AppContent() {
               <button
                 onClick={handleSave}
                 disabled={isSaving}
-                className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:bg-green-400 transition-colors font-medium"
+                className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:bg-green-400 font-medium"
               >
                 <Save className="w-5 h-5" />
                 {isSaving ? 'Saving...' : 'Save'}
@@ -149,7 +159,7 @@ function AppContent() {
                 </div>
                 <button
                   onClick={logout}
-                  className="p-2 rounded-lg hover:bg-red-50 transition-colors"
+                  className="p-2 rounded-lg hover:bg-red-50"
                   title="Logout"
                 >
                   <LogOut className="w-5 h-5 text-red-600" />
@@ -157,6 +167,56 @@ function AppContent() {
               </div>
             </div>
           </div>
+          
+          {/* Mobile Menu Dropdown */}
+          {mobileMenuOpen && (
+            <div className="lg:hidden mt-3 pt-3 border-t border-gray-200 space-y-2">
+              <button
+                onClick={() => { setIsGalleryOpen(true); setMobileMenuOpen(false); }}
+                className="w-full flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+              >
+                <Plus className="w-5 h-5" />
+                Add Widget
+              </button>
+              
+              <div className="flex gap-2">
+                <button
+                  onClick={undo}
+                  disabled={!canUndo()}
+                  className="flex-1 px-4 py-2 border border-gray-300 rounded-lg disabled:opacity-30"
+                >
+                  <Undo className="w-5 h-5 mx-auto" />
+                </button>
+                <button
+                  onClick={redo}
+                  disabled={!canRedo()}
+                  className="flex-1 px-4 py-2 border border-gray-300 rounded-lg disabled:opacity-30"
+                >
+                  <Redo className="w-5 h-5 mx-auto" />
+                </button>
+                <button
+                  onClick={handleSave}
+                  disabled={isSaving}
+                  className="flex-1 px-4 py-2 bg-green-600 text-white rounded-lg"
+                >
+                  <Save className="w-5 h-5 mx-auto" />
+                </button>
+              </div>
+              
+              <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                <div>
+                  <p className="text-sm font-medium text-gray-800">{user?.name}</p>
+                  <p className="text-xs text-gray-500 capitalize">{user?.role}</p>
+                </div>
+                <button
+                  onClick={logout}
+                  className="p-2 bg-red-100 rounded-lg"
+                >
+                  <LogOut className="w-5 h-5 text-red-600" />
+                </button>
+              </div>
+            </div>
+          )}
         </div>
       </nav>
       
@@ -165,13 +225,11 @@ function AppContent() {
         <DashboardCanvas />
       </main>
       
-      {/* Widget Gallery Sidebar */}
       <WidgetGallery 
         isOpen={isGalleryOpen} 
         onClose={() => setIsGalleryOpen(false)} 
       />
       
-      {/* Widget Configuration Modal */}
       <WidgetConfigPanel />
     </div>
   );
@@ -184,19 +242,3 @@ export default function App() {
     </QueryClientProvider>
   );
 }
-
-{/* DEBUG: Test notes update */}
-<button
-  onClick={() => {
-    const notesWidget = currentDashboard?.layout?.find(w => w.widgetType === 'notes.markdown');
-    if (notesWidget) {
-      console.log('Current notes widget:', notesWidget);
-      alert('Notes content: ' + notesWidget.config.content);
-    } else {
-      alert('No notes widget found!');
-    }
-  }}
-  className="px-3 py-1 bg-purple-600 text-white rounded text-sm"
->
-  🔍 Check Notes
-</button>
