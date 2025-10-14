@@ -1,5 +1,5 @@
 // frontend/src/components/dashboard/DashboardCanvas.jsx
-import { useMemo } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 import { Responsive, WidthProvider } from 'react-grid-layout';
 import 'react-grid-layout/css/styles.css';
 import 'react-resizable/css/styles.css';
@@ -14,7 +14,20 @@ export default function DashboardCanvas() {
   const { currentDashboard, updateLayout, removeWidget, duplicateWidget, selectWidget } = useDashboardStore();
   const { canEdit } = useAuthStore();
   
+  const [isMobile, setIsMobile] = useState(false);
+  const [longPressWidget, setLongPressWidget] = useState(null);
+  
   const isEditable = canEdit();
+  
+  // Detect mobile
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
   
   const layout = useMemo(() => {
     if (!currentDashboard?.layout) return [];
@@ -49,9 +62,9 @@ export default function DashboardCanvas() {
   
   if (!currentDashboard) {
     return (
-      <div className="h-full flex items-center justify-center bg-gray-50">
+      <div className="h-full flex items-center justify-center bg-gray-50 p-4">
         <div className="text-center">
-          <h2 className="text-2xl font-bold text-gray-800 mb-2">Loading Dashboard...</h2>
+          <h2 className="text-xl lg:text-2xl font-bold text-gray-800 mb-2">Loading Dashboard...</h2>
         </div>
       </div>
     );
@@ -59,80 +72,80 @@ export default function DashboardCanvas() {
   
   if (!currentDashboard.layout || currentDashboard.layout.length === 0) {
     return (
-      <div className="h-full flex items-center justify-center bg-gray-50">
+      <div className="h-full flex items-center justify-center bg-gray-50 p-4">
         <div className="text-center">
-          <h2 className="text-2xl font-bold text-gray-800 mb-2">Empty Dashboard</h2>
-          <p className="text-gray-600 mb-4">Click "Add Widget" to get started</p>
+          <h2 className="text-xl lg:text-2xl font-bold text-gray-800 mb-2">Empty Dashboard</h2>
+          <p className="text-sm lg:text-base text-gray-600 mb-4">Click "Add Widget" to get started</p>
         </div>
       </div>
     );
   }
   
   return (
-    <div className="h-full w-full p-6 bg-gray-50 overflow-auto">
+    <div className="h-full w-full p-2 lg:p-6 bg-gray-50 overflow-auto">
       <ResponsiveGridLayout
         className="layout"
         layouts={{ lg: layout }}
         breakpoints={{ lg: 1200, md: 996, sm: 768, xs: 480, xxs: 0 }}
         cols={{ lg: 12, md: 10, sm: 6, xs: 4, xxs: 2 }}
-        rowHeight={80}
-        isDraggable={isEditable}
-        isResizable={isEditable}
+        rowHeight={isMobile ? 100 : 80}
+        isDraggable={isEditable && !isMobile}
+        isResizable={isEditable && !isMobile}
         onLayoutChange={handleLayoutChange}
-        compactType={null}
+        compactType="vertical"
         preventCollision={false}
-        margin={[16, 16]}
+        margin={isMobile ? [8, 8] : [16, 16]}
         containerPadding={[0, 0]}
         draggableCancel=".no-drag"
       >
         {currentDashboard.layout.map((widget) => (
           <div key={widget.i} className="relative">
-            {/* Widget Controls - NO-DRAG CLASS */}
+            {/* Widget Controls */}
             {isEditable && (
-              <div className="no-drag absolute -top-3 right-2 z-[1000] flex gap-1 bg-white rounded-lg shadow-xl p-1 border-2 border-gray-300">
+              <div className="no-drag absolute -top-2 right-1 lg:-top-3 lg:right-2 z-[1000] flex gap-0.5 lg:gap-1 bg-white rounded-lg shadow-xl p-0.5 lg:p-1 border-2 border-gray-300">
                 <button
                   onMouseDown={(e) => e.stopPropagation()}
+                  onTouchStart={(e) => e.stopPropagation()}
                   onClick={(e) => {
                     e.preventDefault();
                     e.stopPropagation();
-                    console.log('⚙️ Gear clicked for:', widget.i);
                     selectWidget(widget.i);
                   }}
-                  className="p-2 hover:bg-blue-100 rounded transition-colors cursor-pointer"
+                  className="p-1.5 lg:p-2 hover:bg-blue-100 rounded transition-colors cursor-pointer"
                   type="button"
                   title="Settings"
                 >
-                  <Settings className="w-4 h-4 text-blue-600" />
+                  <Settings className="w-3.5 h-3.5 lg:w-4 lg:h-4 text-blue-600" />
                 </button>
                 <button
                   onMouseDown={(e) => e.stopPropagation()}
+                  onTouchStart={(e) => e.stopPropagation()}
                   onClick={(e) => {
                     e.preventDefault();
                     e.stopPropagation();
-                    console.log('📋 Duplicate clicked for:', widget.i);
                     duplicateWidget(widget.i);
                   }}
-                  className="p-2 hover:bg-green-100 rounded transition-colors cursor-pointer"
+                  className="p-1.5 lg:p-2 hover:bg-green-100 rounded transition-colors cursor-pointer"
                   type="button"
                   title="Duplicate"
                 >
-                  <Copy className="w-4 h-4 text-green-600" />
+                  <Copy className="w-3.5 h-3.5 lg:w-4 lg:h-4 text-green-600" />
                 </button>
                 <button
                   onMouseDown={(e) => e.stopPropagation()}
+                  onTouchStart={(e) => e.stopPropagation()}
                   onClick={(e) => {
                     e.preventDefault();
                     e.stopPropagation();
                     if (window.confirm('Delete this widget?')) {
-                      console.log('🗑️ Delete clicked for:', widget.i);
                       removeWidget(widget.i);
                     }
                   }}
-                  className="p-2 hover:bg-red-100 rounded transition-colors cursor-pointer"
+                  className="p-1.5 lg:p-2 hover:bg-red-100 rounded transition-colors cursor-pointer"
                   type="button"
                   title="Delete"
                 >
-                  <Trash2 className="w-4 h-4 text-red-600" />
+                  <Trash2 className="w-3.5 h-3.5 lg:w-4 lg:h-4 text-red-600" />
                 </button>
               </div>
             )}

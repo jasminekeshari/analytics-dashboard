@@ -110,51 +110,74 @@ const useDashboardStore = create((set, get) => ({
   // ============================================
   // HISTORY MANAGEMENT (Undo/Redo)
   // ============================================
+  // History management
+addToHistory: (dashboard) => {
+  if (!dashboard) return;
   
-  addToHistory: (dashboard) => {
-    const { history, historyIndex } = get();
-    
-    // Remove any "future" history if we're not at the end
-    const newHistory = history.slice(0, historyIndex + 1);
-    
-    // Add new state
-    newHistory.push(JSON.parse(JSON.stringify(dashboard)));
-    
-    // Keep only last 10 states
-    if (newHistory.length > 10) {
-      newHistory.shift();
+  const { history, historyIndex } = get();
+  
+  // Remove future history if we're in the middle
+  const newHistory = history.slice(0, historyIndex + 1);
+  
+  // Deep clone to prevent reference issues
+  const cloned = JSON.parse(JSON.stringify(dashboard));
+  
+  // Don't add if it's identical to current
+  if (newHistory.length > 0) {
+    const last = newHistory[newHistory.length - 1];
+    if (JSON.stringify(last) === JSON.stringify(cloned)) {
+      return;
     }
-    
-    set({
-      history: newHistory,
-      historyIndex: newHistory.length - 1
-    });
-  },
+  }
   
-  undo: () => {
-    const { history, historyIndex } = get();
-    if (historyIndex > 0) {
-      const newIndex = historyIndex - 1;
-      set({
-        currentDashboard: JSON.parse(JSON.stringify(history[newIndex])),
-        historyIndex: newIndex
-      });
-    }
-  },
+  newHistory.push(cloned);
   
-  redo: () => {
-    const { history, historyIndex } = get();
-    if (historyIndex < history.length - 1) {
-      const newIndex = historyIndex + 1;
-      set({
-        currentDashboard: JSON.parse(JSON.stringify(history[newIndex])),
-        historyIndex: newIndex
-      });
-    }
-  },
+  // Keep only last 10 states
+  if (newHistory.length > 10) {
+    newHistory.shift();
+  }
   
-  canUndo: () => get().historyIndex > 0,
-  canRedo: () => get().historyIndex < get().history.length - 1,
+  set({
+    history: newHistory,
+    historyIndex: newHistory.length - 1
+  });
+},
+
+undo: () => {
+  const { history, historyIndex } = get();
+  if (historyIndex <= 0) return;
+  
+  const newIndex = historyIndex - 1;
+  const dashboard = JSON.parse(JSON.stringify(history[newIndex]));
+  
+  set({
+    currentDashboard: dashboard,
+    historyIndex: newIndex
+  });
+},
+
+redo: () => {
+  const { history, historyIndex } = get();
+  if (historyIndex >= history.length - 1) return;
+  
+  const newIndex = historyIndex + 1;
+  const dashboard = JSON.parse(JSON.stringify(history[newIndex]));
+  
+  set({
+    currentDashboard: dashboard,
+    historyIndex: newIndex
+  });
+},
+
+canUndo: () => {
+  const { historyIndex } = get();
+  return historyIndex > 0;
+},
+
+canRedo: () => {
+  const { history, historyIndex } = get();
+  return historyIndex < history.length - 1;
+}
 }));
 
 export default useDashboardStore;

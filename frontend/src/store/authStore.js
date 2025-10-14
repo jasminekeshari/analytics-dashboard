@@ -2,21 +2,28 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
-/**
- * Auth Store - Manages user authentication with persistence
- */
-
 const useAuthStore = create(
   persist(
     (set) => ({
       user: null,
       isAuthenticated: false,
       
-      // Login function
       login: (email, password, role = 'editor') => {
+        // Validate email format
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+          return Promise.reject(new Error('Invalid email format'));
+        }
+        
+        // Validate password length
+        if (password.length < 6) {
+          return Promise.reject(new Error('Password must be at least 6 characters'));
+        }
+        
+        // Create user object
         const user = {
           email,
-          role,
+          role, // Use the role selected by user
           name: email.split('@')[0],
         };
         
@@ -25,21 +32,19 @@ const useAuthStore = create(
         return Promise.resolve(user);
       },
       
-      // Logout function
       logout: () => {
         set({ user: null, isAuthenticated: false });
         console.log('👋 User logged out');
       },
       
-      // Check if user can edit
       canEdit: () => {
         const state = useAuthStore.getState();
         return state.user?.role === 'editor' || state.user?.role === 'admin';
       },
     }),
     {
-      name: 'auth-storage', // localStorage key
-      getStorage: () => localStorage, // Use localStorage
+      name: 'auth-storage',
+      getStorage: () => localStorage,
     }
   )
 );
