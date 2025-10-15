@@ -303,9 +303,8 @@
 .no-drag * {
   pointer-events: auto !important;
 }
-
 /* ============================================
-   MOBILE & RESPONSIVE FIXES
+   UNIVERSAL DRAG & RESIZE - ALL DEVICES
    ============================================ */
 
 /* Prevent overscroll */
@@ -314,32 +313,92 @@ body {
   -webkit-overflow-scrolling: touch;
 }
 
-/* Mobile: Disable drag, enable smooth scroll */
+/* Enable drag & resize on ALL devices */
+.react-grid-item {
+  touch-action: none;
+  cursor: default;
+  transition: all 200ms ease;
+  transition-property: left, top;
+}
+
+.react-grid-item.cssTransforms {
+  transition-property: transform;
+}
+
+/* Drag handle - visible on all devices */
+.drag-handle {
+  pointer-events: auto !important;
+  touch-action: none !important;
+  cursor: move !important;
+  animation: pulse-drag 2s infinite;
+  z-index: 999 !important;
+}
+
+@keyframes pulse-drag {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+/* Resize handle - ALL DEVICES */
+.react-resizable-handle {
+  position: absolute;
+  width: 40px !important;
+  height: 40px !important;
+  bottom: 0 !important;
+  right: 0 !important;
+  z-index: 999 !important;
+  cursor: se-resize !important;
+  touch-action: none !important;
+  background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%) !important;
+  border-radius: 50% !important;
+  opacity: 0.9 !important;
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+  transition: all 0.2s ease;
+}
+
+.react-resizable-handle:hover,
+.react-resizable-handle:active {
+  opacity: 1 !important;
+  transform: scale(1.1);
+  box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+}
+
+.react-resizable-handle::after {
+  content: "⤡" !important;
+  color: white !important;
+  font-size: 20px !important;
+  font-weight: bold !important;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* Mobile: Larger touch targets */
 @media (max-width: 768px) {
-  .react-grid-item {
-    cursor: default !important;
-    touch-action: pan-y !important;
-  }
-  
   .react-resizable-handle {
-    display: none !important;
+    width: 50px !important;
+    height: 50px !important;
   }
   
-  /* Compact spacing on mobile */
-  .layout {
-    min-height: auto !important;
+  .react-resizable-handle::after {
+    font-size: 24px !important;
+  }
+  
+  .drag-handle {
+    width: 44px !important;
+    height: 44px !important;
   }
 }
 
-/* Desktop: Enable drag */
-@media (min-width: 769px) {
-  .react-grid-item {
-    cursor: move;
-    touch-action: none;
-  }
-}
-
-/* Make buttons always work */
+/* Make control buttons always work */
 .no-drag {
   pointer-events: auto !important;
   cursor: pointer !important;
@@ -351,23 +410,71 @@ body {
   cursor: pointer !important;
   z-index: 9999 !important;
   touch-action: manipulation !important;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
 }
 
-/* Prevent content from blocking buttons */
-.react-grid-item > div:last-child {
+/* Widget content shouldn't block interactions */
+.widget-content {
   pointer-events: none;
+  height: 100%;
+  width: 100%;
 }
 
-.react-grid-item > div:last-child * {
+.widget-content * {
   pointer-events: auto;
 }
 
+/* But allow handles and buttons to work */
+.drag-handle,
+.drag-handle *,
 .no-drag,
-.no-drag * {
+.no-drag *,
+.react-resizable-handle,
+.react-resizable-handle * {
   pointer-events: auto !important;
 }
 
-/* Compact grid on mobile */
+/* Placeholder during drag */
+.react-grid-item.react-grid-placeholder {
+  background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+  opacity: 0.3;
+  border-radius: 12px;
+  border: 3px dashed #3b82f6;
+  z-index: 2;
+  animation: placeholder-pulse 1s infinite;
+}
+
+@keyframes placeholder-pulse {
+  0%, 100% {
+    opacity: 0.3;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* During drag/resize */
+.react-grid-item.resizing {
+  z-index: 100;
+  will-change: width, height;
+  opacity: 0.9;
+}
+
+.react-grid-item.react-draggable-dragging {
+  transition: none;
+  z-index: 100;
+  will-change: transform;
+  opacity: 0.9;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+
+/* Remove unnecessary whitespace */
+.layout {
+  min-height: fit-content !important;
+}
+
+/* Compact on mobile */
 @media (max-width: 768px) {
   .react-grid-layout {
     margin: 0 !important;
@@ -378,45 +485,25 @@ body {
   }
 }
 
-/* Remove unnecessary whitespace */
-.layout {
-  min-height: fit-content !important;
-}
-
-/* Smooth transitions */
-.react-grid-item {
-  transition: all 200ms ease;
-  transition-property: left, top;
-}
-
-.react-grid-item.cssTransforms {
-  transition-property: transform;
-}
-
-/* Placeholder during drag */
-.react-grid-item.react-grid-placeholder {
-  background: #3b82f6;
-  opacity: 0.2;
-  border-radius: 8px;
-  border: 2px dashed #3b82f6;
-}
-
-/* Resize handle for desktop */
+/* Better spacing on larger screens */
 @media (min-width: 769px) {
-  .react-grid-item > .react-resizable-handle::after {
-    content: "";
-    position: absolute;
-    right: 3px;
-    bottom: 3px;
-    width: 5px;
-    height: 5px;
-    border-right: 2px solid rgba(0, 0, 0, 0.4);
-    border-bottom: 2px solid rgba(0, 0, 0, 0.4);
+  .react-grid-item {
+    margin-bottom: 16px !important;
   }
-  
-  .react-resizable-handle-se {
-    bottom: 0;
-    right: 0;
-    cursor: se-resize;
-  }
+}
+
+/* Smooth scrolling for the container */
+.overflow-auto {
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Widget container positioning */
+.widget-container {
+  position: relative;
+}
+
+/* Ensure proper stacking */
+.widget-container > * {
+  position: relative;
 }
