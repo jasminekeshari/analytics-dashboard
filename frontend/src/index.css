@@ -304,7 +304,7 @@
   pointer-events: auto !important;
 }
 /* ============================================
-   UNIVERSAL DRAG & RESIZE - ALL DEVICES
+   ORIGINAL DRAG & RESIZE - ALL DEVICES
    ============================================ */
 
 /* Prevent overscroll */
@@ -313,92 +313,104 @@ body {
   -webkit-overflow-scrolling: touch;
 }
 
-/* Enable drag & resize on ALL devices */
+/* Enable drag & resize on ALL devices - Original Style */
 .react-grid-item {
-  touch-action: none;
-  cursor: default;
   transition: all 200ms ease;
   transition-property: left, top;
+  cursor: move;
+  touch-action: none;
 }
 
 .react-grid-item.cssTransforms {
   transition-property: transform;
 }
 
-/* Drag handle - visible on all devices */
-.drag-handle {
-  pointer-events: auto !important;
-  touch-action: none !important;
-  cursor: move !important;
-  animation: pulse-drag 2s infinite;
-  z-index: 999 !important;
+.react-grid-item.resizing {
+  transition: none;
+  z-index: 100;
+  opacity: 0.9;
 }
 
-@keyframes pulse-drag {
-  0%, 100% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(1.05);
-  }
+.react-grid-item.react-draggable-dragging {
+  transition: none;
+  z-index: 100;
+  opacity: 0.9;
 }
 
-/* Resize handle - ALL DEVICES */
+/* Placeholder during drag */
+.react-grid-item.react-grid-placeholder {
+  background: rgb(59, 130, 246);
+  opacity: 0.2;
+  transition-duration: 100ms;
+  z-index: 2;
+  border-radius: 8px;
+  border: 2px dashed rgb(59, 130, 246);
+}
+
+/* ============================================
+   RESIZE HANDLE - ORIGINAL STYLE (ALL DEVICES)
+   ============================================ */
+
 .react-resizable-handle {
   position: absolute;
-  width: 40px !important;
-  height: 40px !important;
-  bottom: 0 !important;
-  right: 0 !important;
-  z-index: 999 !important;
-  cursor: se-resize !important;
-  touch-action: none !important;
-  background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%) !important;
-  border-radius: 50% !important;
-  opacity: 0.9 !important;
-  display: flex !important;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.2);
-  transition: all 0.2s ease;
+  width: 20px;
+  height: 20px;
+  bottom: 0;
+  right: 0;
+  cursor: se-resize;
+  z-index: 50;
+  touch-action: none;
 }
 
-.react-resizable-handle:hover,
-.react-resizable-handle:active {
-  opacity: 1 !important;
-  transform: scale(1.1);
-  box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+.react-resizable-handle-se {
+  bottom: 0;
+  right: 0;
+  cursor: se-resize;
 }
 
+/* Visual indicator - small corner lines */
 .react-resizable-handle::after {
-  content: "⤡" !important;
-  color: white !important;
-  font-size: 20px !important;
-  font-weight: bold !important;
+  content: "";
   position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  right: 3px;
+  bottom: 3px;
+  width: 5px;
+  height: 5px;
+  border-right: 2px solid rgba(0, 0, 0, 0.4);
+  border-bottom: 2px solid rgba(0, 0, 0, 0.4);
 }
 
-/* Mobile: Larger touch targets */
+/* Hover state - more visible */
+.react-grid-item:hover .react-resizable-handle::after {
+  border-right: 2px solid rgb(59, 130, 246);
+  border-bottom: 2px solid rgb(59, 130, 246);
+  width: 8px;
+  height: 8px;
+}
+
+/* Mobile: Larger touch target */
 @media (max-width: 768px) {
   .react-resizable-handle {
-    width: 50px !important;
-    height: 50px !important;
+    width: 30px;
+    height: 30px;
   }
   
   .react-resizable-handle::after {
-    font-size: 24px !important;
-  }
-  
-  .drag-handle {
-    width: 44px !important;
-    height: 44px !important;
+    right: 5px;
+    bottom: 5px;
+    width: 8px;
+    height: 8px;
+    border-width: 3px;
+    border-right-color: rgba(59, 130, 246, 0.8);
+    border-bottom-color: rgba(59, 130, 246, 0.8);
   }
 }
 
-/* Make control buttons always work */
+/* ============================================
+   BUTTON CONTROLS
+   ============================================ */
+
+/* Make buttons always work */
 .no-drag {
   pointer-events: auto !important;
   cursor: pointer !important;
@@ -411,63 +423,26 @@ body {
   z-index: 9999 !important;
   touch-action: manipulation !important;
   -webkit-tap-highlight-color: transparent;
-  user-select: none;
 }
 
-/* Widget content shouldn't block interactions */
-.widget-content {
+/* Prevent widget content from blocking interactions */
+.react-grid-item > div:last-child {
   pointer-events: none;
-  height: 100%;
-  width: 100%;
 }
 
-.widget-content * {
+.react-grid-item > div:last-child * {
   pointer-events: auto;
 }
 
-/* But allow handles and buttons to work */
-.drag-handle,
-.drag-handle *,
+/* But allow buttons to work */
 .no-drag,
-.no-drag *,
-.react-resizable-handle,
-.react-resizable-handle * {
+.no-drag * {
   pointer-events: auto !important;
 }
 
-/* Placeholder during drag */
-.react-grid-item.react-grid-placeholder {
-  background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
-  opacity: 0.3;
-  border-radius: 12px;
-  border: 3px dashed #3b82f6;
-  z-index: 2;
-  animation: placeholder-pulse 1s infinite;
-}
-
-@keyframes placeholder-pulse {
-  0%, 100% {
-    opacity: 0.3;
-  }
-  50% {
-    opacity: 0.5;
-  }
-}
-
-/* During drag/resize */
-.react-grid-item.resizing {
-  z-index: 100;
-  will-change: width, height;
-  opacity: 0.9;
-}
-
-.react-grid-item.react-draggable-dragging {
-  transition: none;
-  z-index: 100;
-  will-change: transform;
-  opacity: 0.9;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-}
+/* ============================================
+   LAYOUT & SPACING
+   ============================================ */
 
 /* Remove unnecessary whitespace */
 .layout {
@@ -492,18 +467,8 @@ body {
   }
 }
 
-/* Smooth scrolling for the container */
+/* Smooth scrolling */
 .overflow-auto {
   scroll-behavior: smooth;
   -webkit-overflow-scrolling: touch;
-}
-
-/* Widget container positioning */
-.widget-container {
-  position: relative;
-}
-
-/* Ensure proper stacking */
-.widget-container > * {
-  position: relative;
 }
